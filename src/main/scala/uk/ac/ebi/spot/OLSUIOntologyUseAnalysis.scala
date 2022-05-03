@@ -37,31 +37,31 @@ class OLSUIOntologyUseAnalysis(sparkSession: SparkSession, logFilesToRead: Strin
 object OLSUIOntologyUseAnalysis extends Serializable {
   private val logger = Logger[OLSUIOntologyUseAnalysis]
 
-    def main(args: Array[String]): Unit = {
-      val logFilesToRead = args(0)
-      logger.trace("logFilesToRead = " + logFilesToRead)
-      val outputFile = args(1)
-
-      val sparkSession = SparkSession.builder().appName("OLSUILogAnalysis")
-        .master("spark://localhost:7077")
-        .config("spark.jars", "target/scala-2.12/ols-log-analysis.jar")
-        .getOrCreate()
-      sparkSession.sparkContext.setLogLevel("ERROR")
-      val logAnalysis: OLSUIOntologyUseAnalysis = new OLSUIOntologyUseAnalysis(sparkSession, logFilesToRead)
-      val cleanedDataset =  logAnalysis.excludeLogEntries(logAnalysis.includeLogEntries(
-        logAnalysis.parseDataset(logAnalysis.readLogFiles())))
-
-      logger.trace("Cleaned data: Number of lines = " + cleanedDataset.count())
-  //    cleanedDataset.toJavaRDD.saveAsTextFile(outputFile)
-      val groupedByDate = cleanedDataset.groupBy("year", "month", "ontology").count()
-      groupedByDate.show(Int.MaxValue, false)
-      groupedByDate.coalesce(1)
-        .write
-        .option("header","true")
-        .option("sep",",")
-        .mode("overwrite")
-        .csv(outputFile)
-
-      sparkSession.stop()
-    }
+//    def main(args: Array[String]): Unit = {
+//      val logFilesToRead = args(0)
+//      logger.trace("logFilesToRead = " + logFilesToRead)
+//      val outputFile = args(1)
+//
+//      val sparkSession = SparkSession.builder().appName("OLSUILogAnalysis")
+//        .master("spark://localhost:7077")
+//        .config("spark.jars", "target/scala-2.12/ols-log-analysis.jar")
+//        .getOrCreate()
+//      sparkSession.sparkContext.setLogLevel("ERROR")
+//      val logAnalysis: OLSUIOntologyUseAnalysis = new OLSUIOntologyUseAnalysis(sparkSession, logFilesToRead)
+//      val cleanedDataset =  logAnalysis.excludeLogEntries(logAnalysis.includeLogEntries(
+//        logAnalysis.parseDataset(logAnalysis.readLogFiles())))
+//
+//      logger.trace("Cleaned data: Number of lines = " + cleanedDataset.count())
+//  //    cleanedDataset.toJavaRDD.saveAsTextFile(outputFile)
+//      val groupedByDate = cleanedDataset.groupBy("year", "month", "ontology").count()
+//      groupedByDate.show(Int.MaxValue, false)
+//      groupedByDate.coalesce(1)
+//        .write
+//        .option("header","true")
+//        .option("sep",",")
+//        .mode("overwrite")
+//        .csv(outputFile)
+//
+//      sparkSession.stop()
+//    }
 }

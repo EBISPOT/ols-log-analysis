@@ -27,22 +27,22 @@ class OLSUIWebLogAnalysis(sparkSession: SparkSession, logFilesToRead: String)
 object OLSUIWebLogAnalysis  {
   private val logger = Logger[OLSUIWebLogAnalysis]
 
-  def main(args: Array[String]):Unit = {
-    val logFilesToRead = args(0)
-    logger.trace("logFilesToRead = " + logFilesToRead)
-    val outputFile = args(1)
-    val sparkSession = SparkSession.builder().appName("OLSUIWebLogAnalysis").
-      master("local[*]").getOrCreate()
-
-    sparkSession.sparkContext.setLogLevel("ERROR")
-
-    val logAnalysis: OLSUIWebLogAnalysis = new OLSUIWebLogAnalysis(sparkSession, logFilesToRead)
-    val cleanedDataset =  logAnalysis.excludeLogEntries(logAnalysis.includeLogEntries(
-      logAnalysis.parseDataset(logAnalysis.readLogFiles())))
-
-    val groupedByDate = cleanedDataset.groupBy("year", "month").count()
-    groupedByDate.show(12, false)
-//    groupedByDate.toJavaRDD.saveAsTextFile(outputFile)
-    sparkSession.stop()
-  }
+//  def main(args: Array[String]):Unit = {
+//    val logFilesToRead = args(0)
+//    logger.trace("logFilesToRead = " + logFilesToRead)
+//    val outputFile = args(1)
+//    val sparkSession = SparkSession.builder().appName("OLSUIWebLogAnalysis").
+//      master("local[*]").getOrCreate()
+//
+//    sparkSession.sparkContext.setLogLevel("ERROR")
+//
+//    val logAnalysis: OLSUIWebLogAnalysis = new OLSUIWebLogAnalysis(sparkSession, logFilesToRead)
+//    val cleanedDataset =  logAnalysis.excludeLogEntries(logAnalysis.includeLogEntries(
+//      logAnalysis.parseDataset(logAnalysis.readLogFiles())))
+//
+//    val groupedByDate = cleanedDataset.groupBy("year", "month").count()
+//    groupedByDate.show(12, false)
+////    groupedByDate.toJavaRDD.saveAsTextFile(outputFile)
+//    sparkSession.stop()
+//  }
 }

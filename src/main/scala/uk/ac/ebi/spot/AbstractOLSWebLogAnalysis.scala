@@ -18,7 +18,7 @@ abstract class AbstractOLSWebLogAnalysis(private val sparkSession: SparkSession,
     val withoutBotsDataFrame = baseDataFrame.filter(l =>
       !l.getString(0).contains("bot") && !l.getString(0).contains("crawler") &&
         !l.getString(0).contains("root") && !l.getString(0).contains("graph"))
-    logger.trace("Number of logfile lines without bots = " + withoutBotsDataFrame.count())
+//    logger.trace("Number of logfile lines without bots = " + withoutBotsDataFrame.count())
 
     withoutBotsDataFrame.show(10, false)
     withoutBotsDataFrame
@@ -54,6 +54,7 @@ abstract class AbstractOLSWebLogAnalysis(private val sparkSession: SparkSession,
 //%b - Bytes sent, excluding HTTP headers, or '-' if zero
 //%{xxx}i write value of incoming header with name xxx
 //import java.sql.Timestamp
-case class LogFileFormat(remoteIPAddress: String, dateTime: String, month: Int, year: Int, request: String,
-                         status: String, bytes: String, referer: String, userAgent: String)
+case class LogFileFormat(remoteIPAddress: Option[String], dateTime: Option[String], month: Option[Int], year: Option[Int],
+                         request: Option[String], status: Option[String], bytes: Option[String], referer: Option[String],
+                         userAgent: Option[String])
 
